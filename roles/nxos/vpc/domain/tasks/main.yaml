@@ -1,0 +1,31 @@
+---
+# Create and manage the VPC Domain
+
+# Enable the VPC feature
+- name: Enable VPC features
+  cisco.nxos.nxos_feature:
+    feature: "{{ item }}"
+    state: enabled
+  loop:
+    - lacp
+    - vpc
+
+# Create the VPC Domain
+- name: Create NXOS VPC Domain
+  cisco.nxos.nxos_vpc:
+    domain: "{{ item.id }}"
+    role_priority: "{{ item.role_priority | default(omit) }}"
+    system_priority: "{{ item.system_priority | default(omit) }}"
+    delay_restore: "{{ item.delay_restore | default(omit) }}"
+    delay_restore_interface_vlan: "{{ item.delay_restore_interface_vlan | default(omit) }}"
+    delay_restore_orphan_port: "{{ item.delay_restore_orphan_port | default(omit) }}"
+    auto_recovery: "{{ item.auto_recovery | default(omit) }}"
+    auto_recovery_reload_delay: "{{ item.auto_recovery_reload_delay | default(omit) }}"
+    peer_gw: "{{ item.peer_gw | default(omit) }}"
+    pkl_vrf: "{{ item.pkl_vrf | default(omit) }}"
+    pkl_src: "{{ item.pkl_src | default(omit) }}"
+    pkl_dest: "{{ item.pkl_dest | default(omit) }}"
+    state: present
+  loop: "{{ vpc_domain }}"
+  when:
+    - item.switch == ansible_hostname

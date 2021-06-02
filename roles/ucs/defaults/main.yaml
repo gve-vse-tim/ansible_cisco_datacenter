@@ -1,0 +1,70 @@
+---
+# file: ucs/defaults/main.yaml
+
+# These default variables are possible shared with other roles (nxos/vlans)
+# and should be defined at a higher precedence/common level (host groups, e.g.)
+
+fabric_vlans:
+  - vlan_id: 999
+    vlan_name: "default"
+    ucs_fabric: "common"
+    native_vlan: "no"
+    state: present
+    enabled: true
+
+# These default variables for specific to building UCS Fabric based LAN elements
+
+core_vlan_group: "default"
+
+lacp_interfaces:
+  - { name: DF-FabA-PC11, switch_id: A, port_id: 11, admin_state: enabled, state: present }
+  - { name: DF-FabB-PC21, switch_id: B, port_id: 21, admin_state: enabled, state: present }
+
+lacp_members:
+  - { slot_id: 1, port_id: 31, admin_state: enabled, switch_id: A, pc_id: 11, state: present }
+  - { slot_id: 1, port_id: 32, admin_state: enabled, switch_id: A, pc_id: 11, state: present }
+  - { slot_id: 1, port_id: 31, admin_state: enabled, switch_id: B, pc_id: 21, state: present }
+  - { slot_id: 1, port_id: 32, admin_state: enabled, switch_id: B, pc_id: 21, state: present }
+
+mac_pools:
+  - { name: DF-fabric1-a, first_addr: 00:25:B5:DF:A0:01, last_addr: 00:25:B5:DF:A0:FF, state: present }
+  - { name: DF-fabric1-b, first_addr: 00:25:B5:DF:B0:01, last_addr: 00:25:B5:DF:B0:FF, state: present }
+
+vnic_templates:
+  - name: DF-fabric1-a
+    description: "default value"
+    fabric: A
+    mac_pool: DF-fabric1-a
+    mtu: "1500"
+    template_type: updating-template
+    ncp: "default"
+    state: present
+  - name: DF-fabric1-b
+    description: "default value"
+    fabric: B
+    mac_pool: DF-fabric1-b
+    mtu: "1500"
+    template_type: updating-template
+    ncp: "default"
+    state: present
+
+# Examples provided but not defined as to not impact end user playbooks
+# In principle, at least one should be defined
+
+# vnic_tmpl_vlan_group:
+#   - group: core_vlan_group
+#     template: DF-fabric1-a
+#     state: present
+#   - group: core_vlan_group
+#     template: DF-fabric1-b
+#     state: present
+
+# vnic_tmpl_vlan_id:
+#   - name: "default"
+#     template: DF-fabric1-a
+#     native_vlan: "no"
+#     state: present
+#   - name: "default"
+#     template: DF-fabric1-b
+#     native_vlan: "no"
+#     state: present

@@ -1,0 +1,89 @@
+---
+# Default values specific to creating VPCs.  Default values.
+
+vpc_domain:
+  - id: 10
+    switch: "switchA"
+    role_priority: 1000
+    pkl_vrf: 'management'
+    pkl_src: 1.1.1.1
+    pkl_dest: 2.2.2.2
+    system_priority: 2000
+    delay_restore: 150
+    delay_restore_interface_vlan: 10
+    delay_restore_orphan_port: 0
+    auto_recovery: yes
+    auto_recovery_reload_delay: 240
+    peer_gw: no
+    state: present
+  - id: 10
+    switch: "switchB"
+    role_priority: 2000
+    pkl_vrf: 'management'
+    pkl_src: 2.2.2.2
+    pkl_dest: 1.1.1.1
+    system_priority: 2000
+    delay_restore: 150
+    delay_restore_interface_vlan: 10
+    delay_restore_orphan_port: 0
+    auto_recovery: yes
+    auto_recovery_reload_delay: 240
+    peer_gw: no
+    state: present
+
+# Configure the following port channels to be VPC domain participants
+vpc_interfaces:
+  - { vpc: peer_link, portchannel: 100, state: present }
+  - { vpc: 11, portchannel: 11, state: present }
+  - { vpc: 21, portchannel: 21, state: present }
+
+### Allowed VLANs will be generated dynamically from fabric_vlans
+vpc_members:
+  - switch: switchA
+    name: port-channel100
+    mode: trunk
+    native_vlan: 2
+    allowed_vlans: all
+    members:
+      - member: Ethernet1/53
+        mode: active
+      - member: Ethernet1/54
+        mode: active
+  - switch: switchB
+    name: port-channel100
+    mode: trunk
+    native_vlan: 2
+    allowed_vlans: all
+    members:
+      - member: Ethernet1/53
+        mode: active
+      - member: Ethernet1/54
+        mode: active
+  - switch: switchA
+    name: port-channel11
+    mode: trunk
+    native_vlan: 2
+    members:
+      - member: Ethernet1/1
+        mode: active
+  - switch: switchB
+    name: port-channel11
+    mode: trunk
+    native_vlan: 2
+    members:
+      - member: Ethernet1/1
+        mode: active
+  - switch: switchA
+    name: port-channel21
+    mode: access
+    native_vlan: 2
+    members:
+      - member: Ethernet1/2
+        mode: active
+  - switch: switchB
+    name: port-channel21
+    mode: access
+    native_vlan: 2
+    members:
+      - member: Ethernet1/2
+        mode: active

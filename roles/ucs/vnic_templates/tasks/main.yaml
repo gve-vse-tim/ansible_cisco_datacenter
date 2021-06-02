@@ -1,0 +1,80 @@
+---
+# Create vNIC templates (and required policies/pools) to pin to these uplinks
+
+- name: Create MAC Pools for vNICs
+  cisco.ucs.ucs_mac_pool:
+    name: "{{ item.name }}"
+    first_addr: "{{ item.first_addr }}"
+    last_addr: "{{ item.last_addr }}"
+    order: sequential
+    state: "{{ item.state }}"
+    org_dn: "{{ this_ucs_org }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ mac_pools }}"
+
+- name: Create Network Control Policies for vNICs
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.nwctrl.NwctrlDefinition
+      class: NwctrlDefinition
+      properties:
+        name: "{{ item.name }}"
+        cdp: "{{ item.cdp }}"
+        lldp_receive: "{{ item.lldp_receive }}"
+        lldp_transmit: "{{ item.lldp_transmit }}"
+        mac_register_mode: "{{ item.mac_register_mode }}"
+        uplink_fail_action: "{{ item.uplink_fail_action }}"
+        parent_mo_or_dn: "{{ this_ucs_org }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ network_control }}"
+
+- name: Create vNIC Templates for vNICs
+  cisco.ucs.ucs_vnic_template:
+    name: "{{ item.name }}"
+    fabric: "{{ item.fabric }}"
+    template_type: "{{ item.template_type }}"
+    mac_pool: "{{ item.mac_pool }}"
+    network_control_policy: "{{ item.ncp }}"
+    mtu: "{{ item.mtu }}"
+    state: "{{ item.state }}"
+    org_dn: "{{ this_ucs_org }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ vnic_templates }}"
+
+- name: Assign VLAN Group to vNIC templates
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.fabric.FabricNetGroupRef
+      class: FabricNetGroupRef
+      properties:
+        name: "{{ item.group }}"
+        parent_mo_or_dn: "{{ this_ucs_org }}/lan-conn-templ-{{ item.template }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ vnic_tmpl_vlan_group }}"
+  when: vnic_tmpl_vlan_group is defined
+
+- name: Assign VLANs to vNIC templates
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.vnic.VnicEtherIf
+      class: VnicEtherIf
+      properties:
+        name: "{{ item.name }}"
+        default_net: "{{ item.native_vlan }}"
+        parent_mo_or_dn: "{{ this_ucs_org }}/lan-conn-templ-{{ item.template }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ vnic_tmpl_vlan_id }}"
+  when: vnic_tmpl_vlan_id is defined

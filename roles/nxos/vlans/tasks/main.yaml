@@ -1,0 +1,11 @@
+---
+# Create upstream VLANs on NXOS-based switches
+
+- name: Define the Nexus VLANs
+  cisco.nxos.nxos_vlans:
+    config:
+      - vlan_id: "{{ item.vlan_id }}"
+        name: "{{ item.vlan_name | default(omit) }}"
+        enabled: "{{ item.enabled }}"
+    state: merged
+  loop: "{{ fabric_vlans }}"

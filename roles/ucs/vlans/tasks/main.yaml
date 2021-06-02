@@ -1,0 +1,57 @@
+---
+# Create VLANs and VLAN groups related to this set of UCS uplinks
+
+- name: Define the UCS VLANs
+  cisco.ucs.ucs_vlans:
+    name: "{{ item.vlan_name }}"
+    id: "{{ item.vlan_id }}"
+    fabric: "{{ item.ucs_fabric }}"
+    native: "{{ item.native_vlan }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ fabric_vlans }}"
+
+- name: Create VLAN Group
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.fabric.FabricNetGroup
+      class: FabricNetGroup
+      properties:
+        name: "{{ core_vlan_group }}"
+        parent_mo_or_dn: fabric/lan
+    state: present
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+
+- name: Assign VLANs to VLAN Group
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.fabric.FabricPooledVlan
+      class: FabricPooledVlan
+      properties:
+        name: "{{ item.vlan_name }}"
+        parent_mo_or_dn: "fabric/lan/net-group-{{ core_vlan_group }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ fabric_vlans }}"
+
+- name: Assign Uplink Port Channels to VLAN Group
+  cisco.ucs.ucs_managed_objects:
+    objects:
+    - module: ucsmsdk.mometa.fabric.FabricEthVlanPc
+      class: FabricEthVlanPc
+      properties:
+        name: "{{ item.name }}"
+        switch_id: "{{ item.switch_id }}"
+        port_id: "{{ item.port_id }}"
+        parent_mo_or_dn: "fabric/lan/net-group-{{ core_vlan_group }}"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ lacp_interfaces }}"

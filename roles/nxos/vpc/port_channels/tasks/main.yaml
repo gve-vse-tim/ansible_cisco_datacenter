@@ -1,0 +1,57 @@
+---
+#  Create the Virtual Port Channels (VPCs) and assign interfaces
+
+#  Configure the portchannels
+- name: Aggregate interfaces into port-channels
+  cisco.nxos.nxos_lag_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        members: "{{ item.members }}"
+    state: replaced
+  loop: "{{ vpc_members }}"
+  when: item.switch == ansible_hostname
+
+# Enable VPC settings
+- name: Identify the VPC Peer Link
+  cisco.nxos.nxos_vpc_interface:
+    portchannel: "{{ item.portchannel }}"
+    peer_link: "{{ item.vpc }}"
+    state: "{{ item.state }}"
+  loop: "{{ vpc_interfaces }}"
+  when: item.vpc == "peer-link"
+
+- name: Declare port-channels to be VPCs
+  cisco.nxos.nxos_vpc_interface:
+    portchannel: "{{ item.portchannel }}"
+    vpc: "{{ item.vpc }}"
+    state: "{{ item.state }}"
+  loop: "{{ vpc_interfaces }}"
+  when: item.vpc != "peer-link"
+
+# Add VLANs to the port channels
+- name: Assign Layer 2 trunk characteristics to the VPCs
+  cisco.nxos.nxos_l2_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        mode: trunk
+        trunk:
+          native_vlan: "{{ item.native_vlan }}"
+          allowed_vlans: "{{ item.allowed_vlans | default | fabric_vlans | attr('vlan_id') | list | join(',') }}"
+    state: merged
+  loop: "{{ vpc_members }}"
+  when:
+    - item.switch == ansible_hostname
+    - item.mode == "trunk"
+
+- name: Assign Layer 2 access port characteristics to the VPCs
+  cisco.nxos.nxos_l2_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        mode: access
+        access:
+          vlan: "{{ item.native_vlan }}"
+    state: merged
+  loop: "{{ vpc_members }}"
+  when:
+    - item.switch == ansible_hostname
+    - item.mode == "access"
