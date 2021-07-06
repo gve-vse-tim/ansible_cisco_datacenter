@@ -1,0 +1,3 @@
+collections:
+  - name: https://github.com/gve-vse-tim/ansible_cisco_datacenter
+    type: git
