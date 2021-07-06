@@ -1,0 +1,18 @@
+---
+# file: playbooks/connect_ucs_domain.yaml
+
+# Leverage NXOS and UCS roles to connect a UCS domain to upstream Ethernet
+# and FC SAN networks
+
+- hosts: upstream_switches
+  gather_facts: no
+
+  collections:
+    gve_vse_tim.ansible_cisco_datacenter
+
+  vars:
+    cisco_host_type: 'nxos'
+  
+  roles:
+    - connect_domain
+  

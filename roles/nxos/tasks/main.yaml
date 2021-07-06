@@ -1,9 +1,0 @@
----
-# file: nxos/tasks/main.yaml
-
-- name: Add NXOS VLANs Role
-  include_role:
-    name: gve_vse_tim.cisco_lab/nxos/vlans
-- name: Add NXOS VPC Role
-  include_role:
-    name: gve_vse_tim.cisco_lab/nxos/vpc

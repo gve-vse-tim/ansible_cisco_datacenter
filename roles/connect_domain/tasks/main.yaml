@@ -1,0 +1,19 @@
+---
+# file: connect_domain/tasks/main.yaml
+
+# Configure upstream networking
+- name: Add NXOS VLANs Role
+  include_role:
+    name: nxos/vlans
+  when: cisco_host_type == 'nxos'
+  
+- name: Add NXOS VPC Role
+  include_role:
+    name: nxos/vpc
+  when: cisco_host_type == 'nxos'
+
+# Configure UCS networking
+
+# Configure upstream block storage
+
+# Configure UCS storage

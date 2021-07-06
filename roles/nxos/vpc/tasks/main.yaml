@@ -3,7 +3,7 @@
 
 - name: Add VPC Domain Role
   include_role:
-    name: gve_vse_tim.cisco_lab/nxos/vpc/domain
+    name: nxos/vpc/domain
 - name: Add VPC Port Channel Roles
   include_role:
-    name: gve_vse_tim.cisco_lab/nxos/vpc/port_channels
+    name: nxos/vpc/port_channels
