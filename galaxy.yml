@@ -5,7 +5,7 @@
 namespace: gve_vse_tim
 
 # The name of the collection. Has the same character restrictions as 'namespace'
-name: ciscodc
+name: ansible_cisco_datacenter
 
 # The version of the collection. Must be compatible with semantic versioning
 version: 0.1.0
@@ -16,8 +16,7 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Tim Miller <timmil@cisco.com>
-
+  - Tim Miller <timmil@cisco.com>
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
@@ -40,7 +39,7 @@ tags: [cisco, nxos, ucs]
 # collection label 'namespace.name'. The value is a version range
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
-dependencies: {cisco.ucs: 1.6.0, cisco.nxos: 2.3.0}
+dependencies: {cisco.ucs: 1.6.0, cisco.nxos: 2.4.0}
 
 # The URL of the originating SCM repository
 repository: https://github.com/gve_vse_tim/ansible_cisco_datacenter
@@ -59,4 +58,3 @@ issues: https://github.com/gvs_vse_tim/ansible_cisco_datacenter/issue/tracker
 # uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
 # and '.git' are always filtered
 build_ignore: []
-
