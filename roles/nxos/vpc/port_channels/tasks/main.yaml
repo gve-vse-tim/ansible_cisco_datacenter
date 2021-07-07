@@ -9,7 +9,7 @@
         members: "{{ item.members }}"
     state: replaced
   loop: "{{ vpc_members }}"
-  when: item.switch == ansible_hostname
+  when: item.switch == inventory_hostname
 
 # Enable VPC settings
 - name: Identify the VPC Peer Link
@@ -40,7 +40,7 @@
     state: merged
   loop: "{{ vpc_members }}"
   when:
-    - item.switch == ansible_hostname
+    - item.switch == inventory_hostname
     - item.mode == "trunk"
 
 - name: Assign Layer 2 access port characteristics to the VPCs
@@ -53,5 +53,5 @@
     state: merged
   loop: "{{ vpc_members }}"
   when:
-    - item.switch == ansible_hostname
+    - item.switch == inventory_hostname
     - item.mode == "access"

@@ -28,4 +28,4 @@
     state: present
   loop: "{{ vpc_domain }}"
   when:
-    - item.switch == ansible_hostname
+    - item.switch == inventory_hostname
