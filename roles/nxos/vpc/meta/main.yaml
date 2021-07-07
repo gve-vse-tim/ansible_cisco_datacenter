@@ -1,0 +1,5 @@
+---
+# file: nxos/meta/main.yaml
+
+collections:
+  - gve_vse_tim.ansible_cisco_datacenter

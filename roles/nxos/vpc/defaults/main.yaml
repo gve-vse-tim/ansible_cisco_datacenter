@@ -1,6 +1,14 @@
 ---
 # Default values specific to creating VPCs.  Default values.
 
+fabric_vlans:
+  - vlan_id: 999
+    vlan_name: "default"
+    ucs_fabric: "common"
+    native_vlan: "no"
+    state: present
+    enabled: true
+
 vpc_domain:
   - id: 10
     switch: "switchA"
