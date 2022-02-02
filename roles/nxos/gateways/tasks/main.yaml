@@ -1,0 +1,36 @@
+---
+# Create traditional Layer 3 gateways via SVIs and HSRP
+
+# Enable the SVI feature
+- name: Ensure interface-vlan feature is enable
+  cisco.nxos.nxos_feature:
+    feature: interface-vlan
+    state: enabled
+
+# Create the SVI
+- name: Create the VLAN SVIs
+  cisco.nxos.nxos_l3_interfaces:
+    config:
+      - name: "vlan{{ item.vlan_id }}"
+        ipv4:
+        - address: "{{ item.ipv4_address }}"
+    state: "{{ item.state }}"
+  loop: "{{ vlan_interfaces }}"
+
+# Enable the HSRP feature
+- name: Ensure hsrp feature is enable
+  cisco.nxos.nxos_feature:
+    feature: hsrp
+    state: enabled
+
+# Add HSRP
+- name: Add HSRP to VLAN SVIs
+  cisco.nxos.nxos_hsrp:
+    interface: "{{ item.interface }}"
+    group: "{{ item.group }}"
+    vip: "{{ item.vip }}"
+    priority: "{{ item.priority }}"
+    preempt: "{{ item.preempt }}"
+    version: "{{ item.version }}"
+    state: "{{ item.state }}"
+  loop: "{{ hsrp_groups }}"

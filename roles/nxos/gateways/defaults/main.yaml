@@ -1,0 +1,19 @@
+---
+# file: nxos/gateways/defaults/main.yaml
+
+# Default variables needed for this role.  Please note, that other roles
+# may reference the same variables and so these should be defined at a
+# higher precedence that role/defaults (such as host group)
+
+vlan_interfaces:
+  - vlan_id: 999
+    ipv4_address: "0.0.0.0/0"
+
+hsrp_groups:
+  - interface: "vlan999"
+    group: 999
+    vip: "0.0.0.0/0"
+    priority: 100
+    preempt: enabled
+    version: 2
+    state: present
