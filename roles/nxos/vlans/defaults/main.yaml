@@ -1,5 +1,5 @@
 ---
-# file: nxos/defaults/main.yaml
+# file: nxos/vlans/defaults/main.yaml
 
 # Default variables needed for this role.  Please note, that other roles
 # may reference the same variables and so these should be defined at a

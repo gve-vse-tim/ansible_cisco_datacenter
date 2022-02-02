@@ -1,6 +1,7 @@
 ---
 # Create upstream VLANs on NXOS-based switches
 
+# Define the VLAN
 - name: Define the Nexus VLANs
   cisco.nxos.nxos_vlans:
     config:
