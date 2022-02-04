@@ -17,6 +17,14 @@
     state: "{{ item.state }}"
   loop: "{{ vlan_interfaces }}"
 
+- name: Enable/Disable the VLAN SVI
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "vlan{{ item.vlan_id }}"
+        enabled: "{{ item.enabled }}"
+    state: merged
+  loop: "{{ vlan_interfaces }}"
+
 # Enable the HSRP feature
 - name: Ensure hsrp feature is enable
   cisco.nxos.nxos_feature:

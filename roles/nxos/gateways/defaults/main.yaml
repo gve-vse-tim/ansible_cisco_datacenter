@@ -8,6 +8,8 @@
 vlan_interfaces:
   - vlan_id: 999
     ipv4_address: "0.0.0.0/0"
+    state: replace
+    enabled: true
 
 hsrp_groups:
   - interface: "vlan999"
