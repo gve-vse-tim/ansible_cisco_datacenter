@@ -6,7 +6,6 @@ our (Cisco GVE) lab environment.
 ## Requirements
 - Python 3.10.x
 - Pip 22.0.3
-- Virtualenv 20.13.x
 - Ansible 5.3.0 (implies Ansible Core 2.12.2)
 - Paramiko 2.9.2
 - UCSM SDK 0.9.12
@@ -18,9 +17,7 @@ our (Cisco GVE) lab environment.
 Python virtual environment:
 
 ```bash
-pip install virtualenv
-# Should install in $HOME/.local/bin
-virtualenv ansible-5.3
+python -m venv ansible-5.3
 source ansible-5.3/bin/activate
 pip install -r requirements.txt
 ansible-galaxy collection install -r requirements.yml

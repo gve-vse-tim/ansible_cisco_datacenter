@@ -1,0 +1,9 @@
+---
+# file: main.yaml
+
+# Export the running config to the ansible client
+- name: Export running config to Ansible client (running.{{ my_date_time }})
+  nxos_config:
+    backup: yes
+    backup_options:
+      filename: "{{ ansible_hostname }}_running_{{ my_date_time }}.cfg"
