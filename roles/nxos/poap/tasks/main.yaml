@@ -1,0 +1,14 @@
+---
+# file: nxos/poap/tasks/main.yaml
+
+# Make a call to switch to 'write erase' so that POAP can begin
+- name: "Clear startup configuration on switch"
+  nxos_command:
+    commands:
+      - command: 'write erase'
+        prompt: 'Do you wish to proceed'
+        answer: 'y'
+
+- name: "Reload the switch"
+  nxos_reboot:
+    confirm: true
