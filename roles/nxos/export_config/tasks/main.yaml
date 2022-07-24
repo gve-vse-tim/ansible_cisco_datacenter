@@ -6,4 +6,5 @@
   nxos_config:
     backup: yes
     backup_options:
+      dir_path: "{{ export_directory }}"
       filename: "{{ inventory_hostname }}_running_{{ my_date_time }}.cfg"
