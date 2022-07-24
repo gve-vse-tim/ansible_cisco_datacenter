@@ -6,4 +6,4 @@
   nxos_config:
     backup: yes
     backup_options:
-      filename: "{{ ansible_hostname }}_running_{{ my_date_time }}.cfg"
+      filename: "{{ inventory_hostname }}_running_{{ my_date_time }}.cfg"
