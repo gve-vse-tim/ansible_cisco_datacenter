@@ -1,7 +1,18 @@
 ---
 #  Create the Virtual Port Channels (VPCs) and assign interfaces
 
-#  Configure the portchannels
+# Create the portchannel interface, add properties
+- name: Create port-channels interfaces with properties
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        enabled: "{{ item.enabled }}"
+        mode: "{{ item.type }}"
+    state: replaced
+  loop: "{{ vpc_interfaces }}"
+
+# Configure the portchannels
 - name: Aggregate interfaces into port-channels
   cisco.nxos.nxos_lag_interfaces:
     config:

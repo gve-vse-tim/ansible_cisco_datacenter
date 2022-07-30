@@ -49,6 +49,8 @@ vpc_interfaces:
 vpc_members:
   - switch: switchA
     name: port-channel100
+    description: "VPC Peer Link"
+    type: layer2
     mode: trunk
     native_vlan: 2
     allowed_vlans: all
@@ -59,6 +61,8 @@ vpc_members:
         mode: active
   - switch: switchB
     name: port-channel100
+    description: "VPC Peer Link"
+    type: layer2
     mode: trunk
     native_vlan: 2
     allowed_vlans: all
@@ -69,6 +73,8 @@ vpc_members:
         mode: active
   - switch: switchA
     name: port-channel11
+    description: "Port Channel 11"
+    type: layer2
     mode: trunk
     native_vlan: 2
     members:
@@ -76,6 +82,8 @@ vpc_members:
         mode: active
   - switch: switchB
     name: port-channel11
+    description: "Port Channel 11"
+    type: layer2
     mode: trunk
     native_vlan: 2
     members:
@@ -83,6 +91,8 @@ vpc_members:
         mode: active
   - switch: switchA
     name: port-channel21
+    description: "Port Channel 12"
+    type: layer2
     mode: access
     native_vlan: 2
     members:
@@ -90,6 +100,8 @@ vpc_members:
         mode: active
   - switch: switchB
     name: port-channel21
+    description: "Port Channel 12"
+    type: layer2
     mode: access
     native_vlan: 2
     members:
