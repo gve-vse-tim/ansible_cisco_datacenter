@@ -23,10 +23,10 @@ vpc_domain_common:
 
 # host_vars
 vpc_domain_local:
-  - role_priority: 1000
-    pkl_vrf: 'management'
-    pkl_src: 1.1.1.1
-    pkl_dest: 2.2.2.2  
+  role_priority: 1000
+  pkl_vrf: 'management'
+  pkl_src: 1.1.1.1
+  pkl_dest: 2.2.2.2  
 
 # Configure the following port channels to be VPC domain participants
 vpc_interfaces:
