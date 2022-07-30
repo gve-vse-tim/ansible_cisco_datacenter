@@ -13,19 +13,17 @@
 # Create the VPC Domain
 - name: Create NXOS VPC Domain
   cisco.nxos.nxos_vpc:
-    domain: "{{ item.id }}"
+    state: "{{ vpc_domain_common.state }}"
+    domain: "{{ vpc_domain_common.domain }}"
+    system_priority: "{{ vpc_domain_common.system_priority | default(omit) }}"
+    delay_restore: "{{ vpc_domain_common.delay_restore | default(omit) }}"
+    delay_restore_interface_vlan: "{{ vpc_domain_common.delay_restore_interface_vlan | default(omit) }}"
+    delay_restore_orphan_port: "{{ vpc_domain_common.delay_restore_orphan_port | default(omit) }}"
+    auto_recovery: "{{ vpc_domain_common.auto_recovery | default(omit) }}"
+    auto_recovery_reload_delay: "{{ vpc_domain_common.auto_recovery_reload_delay | default(omit) }}"
+    peer_gw: "{{ vpc_domain_common.peer_gw | default(omit) }}"
     role_priority: "{{ item.role_priority | default(omit) }}"
-    system_priority: "{{ item.system_priority | default(omit) }}"
-    delay_restore: "{{ item.delay_restore | default(omit) }}"
-    delay_restore_interface_vlan: "{{ item.delay_restore_interface_vlan | default(omit) }}"
-    delay_restore_orphan_port: "{{ item.delay_restore_orphan_port | default(omit) }}"
-    auto_recovery: "{{ item.auto_recovery | default(omit) }}"
-    auto_recovery_reload_delay: "{{ item.auto_recovery_reload_delay | default(omit) }}"
-    peer_gw: "{{ item.peer_gw | default(omit) }}"
     pkl_vrf: "{{ item.pkl_vrf | default(omit) }}"
     pkl_src: "{{ item.pkl_src | default(omit) }}"
     pkl_dest: "{{ item.pkl_dest | default(omit) }}"
-    state: present
-  loop: "{{ vpc_domain }}"
-  when:
-    - item.switch == inventory_hostname
+  loop: "{{ vpc_domain_local }}"

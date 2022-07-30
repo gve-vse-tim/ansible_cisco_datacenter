@@ -9,35 +9,24 @@ fabric_vlans:
     state: present
     enabled: true
 
-vpc_domain:
-  - id: 10
-    switch: "switchA"
-    role_priority: 1000
+# group_vars
+vpc_domain_common:
+  domain: 10
+  system_priority: 2000
+  delay_restore: 150
+  delay_restore_interface_vlan: 10
+  delay_restore_orphan_port: 0
+  auto_recovery: yes
+  auto_recovery_reload_delay: 240
+  peer_gw: no
+  state: present
+
+# host_vars
+vpc_domain_local:
+  - role_priority: 1000
     pkl_vrf: 'management'
     pkl_src: 1.1.1.1
-    pkl_dest: 2.2.2.2
-    system_priority: 2000
-    delay_restore: 150
-    delay_restore_interface_vlan: 10
-    delay_restore_orphan_port: 0
-    auto_recovery: yes
-    auto_recovery_reload_delay: 240
-    peer_gw: no
-    state: present
-  - id: 10
-    switch: "switchB"
-    role_priority: 2000
-    pkl_vrf: 'management'
-    pkl_src: 2.2.2.2
-    pkl_dest: 1.1.1.1
-    system_priority: 2000
-    delay_restore: 150
-    delay_restore_interface_vlan: 10
-    delay_restore_orphan_port: 0
-    auto_recovery: yes
-    auto_recovery_reload_delay: 240
-    peer_gw: no
-    state: present
+    pkl_dest: 2.2.2.2  
 
 # Configure the following port channels to be VPC domain participants
 vpc_interfaces:
