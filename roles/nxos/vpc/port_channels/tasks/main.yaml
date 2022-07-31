@@ -5,12 +5,12 @@
 - name: Create port-channels interfaces with properties
   cisco.nxos.nxos_interfaces:
     config:
-      - name: "{{ item.name }}"
+      - name: "port-channel{{ item.portchannel }}"
         description: "{{ item.description }}"
         enabled: "{{ item.enabled }}"
         mode: "{{ item.type }}"
     state: replaced
-  loop: "{{ vpc_interfaces }}"
+  loop: "{{ vpc_intf_common }}"
 
 # Configure the portchannels
 - name: Aggregate interfaces into port-channels
@@ -19,8 +19,7 @@
       - name: "{{ item.name }}"
         members: "{{ item.members }}"
     state: replaced
-  loop: "{{ vpc_members }}"
-  when: item.switch == inventory_hostname
+  loop: "{{ vpc_intf_local }}"
 
 # Enable VPC settings
 - name: Identify the VPC Peer Link
@@ -28,7 +27,7 @@
     portchannel: "{{ item.portchannel }}"
     peer_link: "{{ item.vpc }}"
     state: "{{ item.state }}"
-  loop: "{{ vpc_interfaces }}"
+  loop: "{{ vpc_intf_common }}"
   when: item.vpc == "peer-link"
 
 - name: Declare port-channels to be VPCs
@@ -36,7 +35,7 @@
     portchannel: "{{ item.portchannel }}"
     vpc: "{{ item.vpc }}"
     state: "{{ item.state }}"
-  loop: "{{ vpc_interfaces }}"
+  loop: "{{ vpc_intf_common }}"
   when: item.vpc != "peer-link"
 
 # Add VLANs to the port channels
@@ -49,20 +48,17 @@
           native_vlan: "{{ item.native_vlan }}"
           allowed_vlans: "{{ item.allowed_vlans | default | fabric_vlans | attr('vlan_id') | list | join(',') }}"
     state: merged
-  loop: "{{ vpc_members }}"
+  loop: "{{ vpc_intf_local }}"
   when:
-    - item.switch == inventory_hostname
     - item.mode == "trunk"
 
 - name: Assign Layer 2 access port characteristics to the VPCs
   cisco.nxos.nxos_l2_interfaces:
     config:
       - name: "{{ item.name }}"
-        mode: access
         access:
           vlan: "{{ item.native_vlan }}"
     state: merged
-  loop: "{{ vpc_members }}"
+  loop: "{{ vpc_intf_local }}"
   when:
-    - item.switch == inventory_hostname
     - item.mode == "access"

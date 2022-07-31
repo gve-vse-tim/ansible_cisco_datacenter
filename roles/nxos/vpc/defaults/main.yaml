@@ -28,71 +28,44 @@ vpc_domain_local:
   pkl_src: 1.1.1.1
   pkl_dest: 2.2.2.2  
 
-# Configure the following port channels to be VPC domain participants
-vpc_interfaces:
-  - { vpc: peer_link, portchannel: 100, state: present }
-  - { vpc: 11, portchannel: 11, state: present }
-  - { vpc: 21, portchannel: 21, state: present }
+# group_vars
+vpc_intf_common:
+  - vpc: peer_link
+    portchannel: 100
+    description: "VPC Peer Link"
+    type: layer2
+    mode: trunk
+    native_vlan: 2
+    allowed_vlans: all
+    state: present
+  - vpc: 11
+    portchannel: 11
+    description: "Port Channel 11"
+    type: layer2
+    mode: trunk
+    native_vlan: 2
+    state: present
+  - vpc: 21
+    portchannel: 21
+    description: "Port Channel 21"
+    type: layer2
+    mode: access
+    native_vlan: 2
+    state: present
 
-### Allowed VLANs will be generated dynamically from fabric_vlans
-vpc_members:
-  - switch: switchA
-    name: port-channel100
-    description: "VPC Peer Link"
-    type: layer2
-    mode: trunk
-    native_vlan: 2
-    allowed_vlans: all
+# host_vars
+vpc_intf_local:
+  - name: port-channel100
     members:
       - member: Ethernet1/53
         mode: active
       - member: Ethernet1/54
         mode: active
-  - switch: switchB
-    name: port-channel100
-    description: "VPC Peer Link"
-    type: layer2
-    mode: trunk
-    native_vlan: 2
-    allowed_vlans: all
-    members:
-      - member: Ethernet1/53
-        mode: active
-      - member: Ethernet1/54
-        mode: active
-  - switch: switchA
-    name: port-channel11
-    description: "Port Channel 11"
-    type: layer2
-    mode: trunk
-    native_vlan: 2
+  - name: port-channel11
     members:
       - member: Ethernet1/1
         mode: active
-  - switch: switchB
-    name: port-channel11
-    description: "Port Channel 11"
-    type: layer2
-    mode: trunk
-    native_vlan: 2
-    members:
-      - member: Ethernet1/1
-        mode: active
-  - switch: switchA
-    name: port-channel21
-    description: "Port Channel 12"
-    type: layer2
-    mode: access
-    native_vlan: 2
-    members:
-      - member: Ethernet1/2
-        mode: active
-  - switch: switchB
-    name: port-channel21
-    description: "Port Channel 12"
-    type: layer2
-    mode: access
-    native_vlan: 2
+  - name: port-channel21
     members:
       - member: Ethernet1/2
         mode: active
