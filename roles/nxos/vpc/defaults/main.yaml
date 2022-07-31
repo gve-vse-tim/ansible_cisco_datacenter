@@ -30,7 +30,7 @@ vpc_domain_local:
 
 # group_vars
 vpc_intf_common:
-  - vpc: peer_link
+  - vpc: peer-link
     portchannel: 100
     description: "VPC Peer Link"
     type: layer2

@@ -25,7 +25,7 @@
 - name: Identify the VPC Peer Link
   cisco.nxos.nxos_vpc_interface:
     portchannel: "{{ item.portchannel }}"
-    peer_link: "{{ item.vpc }}"
+    peer_link: true
     state: "{{ item.state }}"
   loop: "{{ vpc_intf_common }}"
   when: item.vpc == "peer-link"
@@ -48,7 +48,7 @@
           native_vlan: "{{ item.native_vlan }}"
           allowed_vlans: "{{ item.allowed_vlans | default | fabric_vlans | attr('vlan_id') | list | join(',') }}"
     state: merged
-  loop: "{{ vpc_intf_local }}"
+  loop: "{{ vpc_intf_common }}"
   when:
     - item.mode == "trunk"
 
@@ -59,6 +59,6 @@
         access:
           vlan: "{{ item.native_vlan }}"
     state: merged
-  loop: "{{ vpc_intf_local }}"
+  loop: "{{ vpc_intf_common }}"
   when:
     - item.mode == "access"
