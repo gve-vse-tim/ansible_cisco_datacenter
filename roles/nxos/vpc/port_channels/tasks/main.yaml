@@ -42,7 +42,7 @@
 - name: Assign Layer 2 trunk characteristics to the VPCs
   cisco.nxos.nxos_l2_interfaces:
     config:
-      - name: "{{ item.name }}"
+      - name: "port-channel{{ item.portchannel }}"
         mode: trunk
         trunk:
           native_vlan: "{{ item.native_vlan }}"
@@ -55,7 +55,7 @@
 - name: Assign Layer 2 access port characteristics to the VPCs
   cisco.nxos.nxos_l2_interfaces:
     config:
-      - name: "{{ item.name }}"
+      - name: "port-channel{{ item.portchannel }}"
         access:
           vlan: "{{ item.native_vlan }}"
     state: merged
