@@ -46,7 +46,7 @@
         mode: trunk
         trunk:
           native_vlan: "{{ item.native_vlan }}"
-          allowed_vlans: "{{ item.allowed_vlans | default | fabric_vlans | attr('vlan_id') | list | join(',') }}"
+          allowed_vlans: "{{ item.allowed_vlans }}"
     state: merged
   loop: "{{ vpc_intf_common }}"
   when:
