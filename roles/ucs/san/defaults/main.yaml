@@ -1,0 +1,52 @@
+---
+# file: ucs/san/defaults/main.yaml
+# Example variables for the role, ideally placed in the host vars file for UCS
+
+vsans:
+  - name: sanA
+    vlan_id: 111
+    vsan_id: 11
+    fabric: A
+    fc_zoning: disabled
+    state: present
+  - name: sanB
+    vlan_id: 211
+    vsan_id: 21
+    fabric: B
+    fc_zoning: disabled
+    state: present
+
+wwn_pools:
+  - name: "wwnn"
+    purpose: "node"
+    first: "20:00:00:25:B5:FF:00:01"
+    last: "20:00:00:25:B5:FF:00:FF"
+    state: present
+  - name: "wwpn-A"
+    purpose: "port"
+    first: "20:00:00:25:B5:FF:00:01"
+    last: "20:00:00:25:B5:FF:00:FF"
+    state: present
+  - name: "wwpn-B"
+    purpose: "port"
+    first: "20:00:00:25:B5:FF:00:01"
+    last: "20:00:00:25:B5:FF:00:FF"
+    state: present
+
+vhbas:
+  - name: vhba-A
+    description: vhba-A
+    fabric: "A"
+    wwpn_pool: "wwpn-A"
+    vsan: "sanA"
+    max_data: 2048
+    template_type: "updating-template"
+    state: present
+  - name: vhba-B
+    description: vhba-B
+    fabric: "B"
+    wwpn_pool: "wwpn-B"
+    vsan: "sanB"
+    max_data: 2048
+    template_type: "updating-template"
+    state: present

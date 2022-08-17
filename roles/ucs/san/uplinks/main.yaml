@@ -1,0 +1,6 @@
+---
+# file: ucs/san/uplinks/main.yaml
+
+# SAN
+- include: create-vsans.yaml
+  tags: SAN_UPLINKS

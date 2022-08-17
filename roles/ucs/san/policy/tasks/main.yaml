@@ -1,0 +1,8 @@
+---
+# file: ucs/san/policy/tasks/main.yaml
+
+# SAN
+- include: create-wwn-pools.yaml
+  tags: SAN_POLICY
+- include: create-vhba-templates.yaml
+  tags: SAN_POLICY
