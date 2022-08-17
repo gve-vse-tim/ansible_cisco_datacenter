@@ -1,5 +1,5 @@
 ---
-# file: ucs/meta/main.yaml
+# file: ucs/lan/meta/main.yaml
 
 collections:
   - gve_vse_tim.ansible_cisco_datacenter

@@ -1,5 +1,5 @@
 ---
-# file: ucs/defaults/main.yaml
+# file: ucs/lan/defaults/main.yaml
 
 # These default variables are possible shared with other roles (nxos/vlans)
 # and should be defined at a higher precedence/common level (host groups, e.g.)
