@@ -11,8 +11,7 @@
         enabled: "{{ item.enabled }}"
         mode: "{{ item.type }}"
     state: replaced
-  loop:
-    - "{{ switchports }}"
+  loop: "{{ switchports }}"
 
 # Configure Switchport Interface - Access Settings
 - name: Configure Switchport Interface - Access Settings
@@ -21,8 +20,7 @@
       - name: "{{ item.name }}"
         access: "{{ item.access }}"
     state: replaced
-  loop:
-    - "{{ switchports }}"
+  loop: "{{ switchports }}"
   when:
     - item.mode == "access"
     - item.type == "layer2"
@@ -35,8 +33,7 @@
         mode: trunk
         trunk: "{{ item.trunk }}"
     state: replaced
-  loop:
-    - "{{ switchports }}"
+  loop: "{{ switchports }}"
   when:
     - item.mode == "trunk"
     - item.type == "layer2"
