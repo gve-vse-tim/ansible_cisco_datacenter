@@ -2,18 +2,7 @@
 # file: main.yaml
 # Example variables required for this role
 
-# group_vars
-switchports_common:
-  - name: "Ethernet1/1"
-    description: "On all switches in the group"
-    type: layer2
-    mode: access
-    access:
-      vlan: "601"
-    enabled: yes
-
-# host_vars
-switchports_local:
+switchports:
   - name: "Ethernet1/2"
     description: "Only on the specific switch"
     type: layer2
