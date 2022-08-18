@@ -1,0 +1,45 @@
+---
+# file: main.yaml
+# Configure switchport interfaces
+
+# Configure Switchport Interface Properties
+- name: Configure Switchport Interface Properties
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        enabled: "{{ item.enabled }}"
+        mode: "{{ item.type }}"
+    state: replaced
+  loop:
+    - "{{ switchports_common }}"
+    - "{{ switchports_local }}"
+
+# Configure Switchport Interface - Access Settings
+- name: Configure Switchport Interface - Access Settings
+  cisco.nxos.nxos_l2_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        access: "{{ item.access }}"
+    state: replaced
+  loop:
+    - "{{ switchports_common }}"
+    - "{{ switchports_local }}"
+  when:
+    - item.mode == "access"
+    - item.type == "layer2"
+
+# Configure Switchport Interface - Trunk Settings
+- name: Configure Switchport Interface - Trunk Settings
+  cisco.nxos.nxos_l2_interfaces:
+    config:
+      - name: "{{ item.name }}"
+        mode: trunk
+        trunk: "{{ item.trunk }}"
+    state: replaced
+  loop:
+    - "{{ switchports_common }}"
+    - "{{ switchports_local }}"
+  when:
+    - item.mode == "trunk"
+    - item.type == "layer2"
