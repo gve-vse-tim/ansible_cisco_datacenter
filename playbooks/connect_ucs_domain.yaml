@@ -5,10 +5,10 @@
 # and FC SAN networks
 
 - hosts: upstream_switches
-  gather_facts: no
+  gather_facts: false
 
   collections:
-    gve_vse_tim.ansible_cisco_datacenter
+    - gve_vse_tim.ansible_cisco_datacenter
 
   vars:
     cisco_host_type: 'nxos'
