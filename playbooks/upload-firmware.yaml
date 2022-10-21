@@ -1,0 +1,23 @@
+---
+# file: upload-firmware.yaml
+
+- hosts: "{{ fabrics }}"
+  gather_facts: false
+
+  vars:
+    image_file_name: "{{ firmware | default(lookup('env', 'NXOS_IMG')) }}"
+    ansible_connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Ensure SCP server feature is enabled
+      cisco.nxos.nxos_feature:
+        feature: scp-server
+        state: enabled
+
+    - name: Transfer local NXOS Image "{{ image_file_name }}" to switch
+      cisco.nxos.nxos_file_copy:
+        file_pull: false
+        local_file: "./firmware/{{ image_file_name }}"
+        remote_file: "{{ image_file_name }}"
+        file_system: "bootflash:"
+

@@ -1,0 +1,26 @@
+---
+# file: replace-startup-config-single.yaml
+
+- hosts: localhost
+  become: false
+  gather_facts: true
+  connection: local
+
+# example: ansible-playbook replace-startup-config-single.yaml -e 'host=fabric2-spine1'
+- hosts: '{{ switch }}'
+  gather_facts: false
+  collections:
+    - gve_vse_tim.ansible_cisco_datacenter
+  vars:
+    startup_directory: "./initial-configs/"
+
+  tasks:
+    - name: Create config to remote switch '{{ switch }}'
+      cisco.nxos.nxos_file_copy:
+        local_file: "{{ startup_directory }}/{{ inventory_hostname }}.startup.config"
+        remote_file: "ansible-startup-config"
+
+    - name: Copy remote config to startup config
+      cisco.nxos.nxos_command:
+        commands:
+          - copy ansible-startup-config startup-config

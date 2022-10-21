@@ -1,0 +1,10 @@
+---
+# file: erase_single.yaml
+
+# example: ansible-playbook erase_single.yaml -e 'switch=fabric2-spine1'
+- hosts: '{{ switch }}'
+  gather_facts: false
+  collections:
+    - gve_vse_tim.ansible_cisco_datacenter
+  roles:
+    - role: nxos/poap

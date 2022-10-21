@@ -1,0 +1,17 @@
+---
+# file: export-fabric-configs.yaml
+
+- hosts: localhost
+  become: false
+  gather_facts: true
+  connection: local
+
+- hosts: "{{ fabrics }}"
+  gather_facts: false
+  collections:
+    - gve_vse_tim.ansible_cisco_datacenter
+  vars:
+    my_date_time: "{{ hostvars['localhost']['ansible_date_time']['date'] }}"
+    export_directory: "./initial-configs/"
+  roles:
+    - role: nxos/export_config

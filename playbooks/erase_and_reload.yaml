@@ -1,0 +1,10 @@
+---
+# file: erase_and_reload.yaml
+
+- hosts: "{{ fabrics }}"
+  gather_facts: false
+  collections:
+    - gve_vse_tim.ansible_cisco_datacenter
+  roles:
+    - role: nxos/poap
+
