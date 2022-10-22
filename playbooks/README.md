@@ -21,6 +21,9 @@ Required Ansible Variables:
   - Ansible string to define fabric group(s) to be backed up.
   - Example: **fabric3** (for a single fabric)
   - Example: **fabric3:fabric4** (for two fabrics)
+- backup_location:
+  - String to define the path to the directory in which the files will be copied.
+  - Example: "./initial-configs/"
 
 ### Upload Switch Firmware
 
