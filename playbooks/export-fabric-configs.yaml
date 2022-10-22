@@ -12,6 +12,6 @@
     - gve_vse_tim.ansible_cisco_datacenter
   vars:
     my_date_time: "{{ hostvars['localhost']['ansible_date_time']['date'] }}"
-    export_directory: "{{ backup_location }}"
+    export_directory: "{{ backup_location | default('./initial-configs') }}"
   roles:
     - role: nxos/export_config
