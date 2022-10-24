@@ -1,0 +1,14 @@
+- name: Configure Fabric Interfaces for UCS Server Ports
+  cisco.ucs.ucs_managed_objects:
+    objects:
+      - module: ucsmsdk.mometa.ether.EtherPIo
+        class: EtherPIo
+        properties:
+          port_id: "{{ item.port_id }}"
+          parent_mo_or_dn: "sys/switch-{{ item.switch_id }}/slot-{{ item.slot_id }}/switch-ether"
+          if_role: "server"
+    state: "{{ item.state }}"
+    hostname: "{{ this_ucs_hostname }}"
+    username: "{{ this_ucs_username }}"
+    password: "{{ this_ucs_password }}"
+  loop: "{{ server_ports }}"
